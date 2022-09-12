@@ -4,12 +4,6 @@ import Todo from "./Todo";
 import { createAsync, deleteAsync, editAsync, fetchAsync } from "./todoSlice";
 import { TODO } from "@/@types/model";
 
-const waitPromise = (timeout: number) => {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), timeout | 2000);
-  });
-};
-
 describe("Todo CRUD test", () => {
   let render: any = null;
   let todoLength = 0;
@@ -35,11 +29,10 @@ describe("Todo CRUD test", () => {
       todo_id: todos[0].todo_id,
       description: todos[0].description + "_edited",
     };
-    render.store.dispatch(editAsync(newTodo));
-    await waitPromise(500);
+    await render.store.dispatch(editAsync(newTodo));
+
     // NOTE: Fetch all todos to check if there is the updated one
-    render.store.dispatch(fetchAsync());
-    await waitPromise(500);
+    await render.store.dispatch(fetchAsync());
     todos = render.store.getState().todo.todos;
     const index = todos.findIndex(
       (todo: TODO) => todo.todo_id === newTodo.todo_id
@@ -50,8 +43,7 @@ describe("Todo CRUD test", () => {
   it("Remove one TODO and check if the todo count is reduced", async () => {
     // Fetch inital todos from the database
     const todos = render.store.getState().todo.todos;
-    render.store.dispatch(deleteAsync(todos[0].todo_id));
-    await waitPromise(1000);
+    await render.store.dispatch(deleteAsync(todos[0].todo_id));
     const newLength = render.store.getState().todo.todos.length;
     expect(newLength).toEqual(todoLength - 1);
     todoLength = newLength;
