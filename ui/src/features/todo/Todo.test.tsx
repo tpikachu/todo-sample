@@ -7,6 +7,8 @@ import { TODO } from "@/@types/model";
 describe("Todo CRUD test", () => {
   let render: any = null;
   let todoLength = 0;
+
+  // eslint-disable-next-line testing-library/no-unnecessary-act
   act(() => {
     render = renderWithProviders(<Todo />);
   });
@@ -22,7 +24,7 @@ describe("Todo CRUD test", () => {
     expect(todoLength).toBeGreaterThan(0);
   });
 
-  it("Edit one TODO and check if the todo count is reduced", async () => {
+  it("Edit one TODO and check if there is edited TODO", async () => {
     // NOTE: Update todos[0]
     let todos = render.store.getState().todo.todos;
     const newTodo = {
